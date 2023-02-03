@@ -19,9 +19,15 @@ module.exports.getAllUser = async (req, res) => {
 module.exports.getRandomUser = async (req, res) => {
     fs.readFile(path.join(__dirname, "../../db/data.json"), "utf-8", (error, data) => {
         if (!error) {
-            const randomUser = Math.round(Math.random() )
             const userData = JSON.parse(data)
-            console.log(userData.length)
+            const randomUser = Math.round(Math.random() * userData.length)
+            const randomUserdata = userData[randomUser]
+            
+            res.status(200).json({
+                success: true,
+                message: "Random user Data",
+                data: randomUserdata
+            })
         }
     })
 
