@@ -3,7 +3,8 @@ const {
     getAllUser,
     getRandomUser,
     saveUser,
-    updateUser
+    updateUser,
+    deleteUser
 } = require("../controllers/users.controller");
 
 const router = express.Router();
@@ -19,5 +20,8 @@ router.post("/save", saveUser)
 
 //? update a user
 router.put("/update/:id", updateUser)
+
+//? delete a user
+router.delete("/delete/:id", deleteUser)
 
 module.exports = router

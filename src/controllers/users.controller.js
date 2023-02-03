@@ -1,5 +1,6 @@
 const fs = require("fs")
 const path = require("path")
+const router = require("../routes/user.route")
 
 //? get all users
 module.exports.getAllUser = async (req, res) => {
@@ -75,7 +76,7 @@ module.exports.updateUser = async (req, res) => {
             const userList = JSON.parse(data)
             const userData = userList.find(user => user.id === parseInt(id))
 
-            if(!userData) {
+            if (!userData) {
                 return res.status(404).json({
                     success: false,
                     message: `No user found with id ${id}`
@@ -83,7 +84,7 @@ module.exports.updateUser = async (req, res) => {
             }
         }
     })
-    
+
     fs.readFile(path.join(__dirname, "../../db/data.json"), "utf-8", (error, data) => {
         if (!error) {
             const userList = JSON.parse(data)
@@ -97,6 +98,45 @@ module.exports.updateUser = async (req, res) => {
                     res.status(201).json({
                         success: true,
                         message: "User updated."
+                    })
+                }
+            })
+        }
+    })
+}
+
+//? delete a user
+module.exports.deleteUser = async (req, res) => {
+    const { id } = req.params;
+    const newData = req.body;
+
+    fs.readFile(path.join(__dirname, "../../db/data.json"), "utf-8", (error, data) => {
+        if (!error) {
+            const userList = JSON.parse(data)
+            const userData = userList.find(user => user.id === parseInt(id))
+
+            if (!userData) {
+                return res.status(404).json({
+                    success: false,
+                    message: `No user found with id ${id}`
+                })
+            }
+        }
+    })
+
+    fs.readFile(path.join(__dirname, "../../db/data.json"), "utf-8", (error, data) => {
+        if (!error) {
+            const userList = JSON.parse(data)
+            const userData = userList.find(user => user.id === parseInt(id))
+            const userPosition = userList.indexOf(userData)
+            userList.splice(userPosition, 1)
+            const userListString = JSON.stringify(userList)
+
+            fs.writeFile(path.join(__dirname, "../../db/data.json"), userListString, (error, data) => {
+                if (!error) {
+                    res.status(201).json({
+                        success: true,
+                        message: "User deleted."
                     })
                 }
             })
