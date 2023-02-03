@@ -2,7 +2,8 @@ const express = require("express");
 const {
     getAllUser,
     getRandomUser,
-    saveUser
+    saveUser,
+    updateUser
 } = require("../controllers/users.controller");
 
 const router = express.Router();
@@ -15,5 +16,8 @@ router.get("/random", getRandomUser)
 
 //? save a user
 router.post("/save", saveUser)
+
+//? update a user
+router.put("/update/:id", updateUser)
 
 module.exports = router
