@@ -67,20 +67,22 @@ module.exports.saveUser = async (req, res) => {
 
 //? update a user
 module.exports.updateUser = async (req, res) => {
-    const dataModel = ["id", "gender", "name", "contact", 'address', "photoUrl"]
-    const dataArray = Object.keys(req.body)
-
-    dataModel.forEach(element => {
-        if (!dataArray.includes(element)) {
-            return res.status(500).json({
-                success: false,
-                message: "Please provide all data"
-            })
-        }
-    })
-
     const { id } = req.params;
     const newData = req.body;
+
+    fs.readFile(path.join(__dirname, "../../db/data.json"), "utf-8", (error, data) => {
+        if (!error) {
+            const userList = JSON.parse(data)
+            const userData = userList.find(user => user.id === parseInt(id))
+
+            if(!userData) {
+                return res.status(404).json({
+                    success: false,
+                    message: `No user found with id ${id}`
+                })
+            }
+        }
+    })
     
     fs.readFile(path.join(__dirname, "../../db/data.json"), "utf-8", (error, data) => {
         if (!error) {
