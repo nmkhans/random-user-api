@@ -22,7 +22,7 @@ module.exports.getRandomUser = async (req, res) => {
             const userData = JSON.parse(data)
             const randomUser = Math.round(Math.random() * userData.length)
             const randomUserdata = userData[randomUser]
-            
+
             res.status(200).json({
                 success: true,
                 message: "Random user Data",
@@ -30,5 +30,37 @@ module.exports.getRandomUser = async (req, res) => {
             })
         }
     })
+}
 
+//? save a user
+module.exports.saveUser = async (req, res) => {
+    const dataModel = ["id", "gender", "name", "contact", 'address', "photoUrl"]
+    const dataArray = Object.keys(req.body)
+
+    dataModel.forEach(element => {
+        if (!dataArray.includes(element)) {
+            return res.status(500).json({
+                success: false,
+                message: "Please provide all data"
+            })
+        }
+    })
+
+    const newData = req.body;
+    fs.readFile(path.join(__dirname, "../../db/data.json"), "utf-8", (error, data) => {
+        if (!error) {
+            const userData = JSON.parse(data)
+            userData.push(newData)
+            const userDataString = JSON.stringify(userData)
+            
+            fs.writeFile(path.join(__dirname,"../../db/data.json"), userDataString, (error, data) => {
+                if(!error) {
+                    res.status(201).json({
+                        success: true,
+                        message: "New user saved"
+                    })
+                }
+            })
+        }
+    })
 }

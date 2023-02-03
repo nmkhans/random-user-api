@@ -1,5 +1,9 @@
 const express = require("express");
-const { getAllUser, getRandomUser } = require("../controllers/users.controller");
+const {
+    getAllUser,
+    getRandomUser,
+    saveUser
+} = require("../controllers/users.controller");
 
 const router = express.Router();
 
@@ -8,5 +12,8 @@ router.get("/all", getAllUser)
 
 //? get random user
 router.get("/random", getRandomUser)
+
+//? save a user
+router.post("/save", saveUser)
 
 module.exports = router
